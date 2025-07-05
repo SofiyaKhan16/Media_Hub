@@ -1,0 +1,568 @@
+openapi: 3.0.0
+info:
+  title: Multi-Media API
+  version: 1.0.0
+  description: API documentation for the Multi-Media backend - A comprehensive media management system with Google authentication and cloud storage integration
+  contact:
+    name: Multi-Media API Support
+    email: support@multimedia.com
+servers:
+  - url: http://localhost:5000
+    description: Development server
+  - url: https://api.multimedia.com
+    description: Production server
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT token obtained from Google authentication
+
+  schemas:
+    User:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Unique identifier for the user
+          example: "64f8c8e9b1a2c3d4e5f6a7b8"
+        username:
+          type: string
+          description: Unique username
+          example: "john_doe"
+        email:
+          type: string
+          format: email
+          description: User's email address
+          example: "john.doe@gmail.com"
+        profilePicture:
+          type: string
+          format: uri
+          description: URL to user's profile picture
+          example: "https://lh3.googleusercontent.com/a/profile.jpg"
+        isActive:
+          type: boolean
+          description: Whether the user account is active
+          example: true
+        createdBy:
+          type: string
+          description: Who created this record
+          example: "system"
+        createdOn:
+          type: string
+          format: date-time
+          description: When the record was created
+          example: "2024-01-15T10:30:00Z"
+        modifiedBy:
+          type: string
+          description: Who last modified this record
+          example: "system"
+        modifiedOn:
+          type: string
+          format: date-time
+          description: When the record was last modified
+          example: "2024-01-15T10:30:00Z"
+
+    MediaFile:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Unique identifier for the media file
+          example: "64f8c8e9b1a2c3d4e5f6a7b9"
+        userId:
+          $ref: '#/components/schemas/User'
+        fileName:
+          type: string
+          description: Original filename
+          maxLength: 255
+          example: "vacation_photo.jpg"
+        fileType:
+          type: string
+          enum: [image, video, audio, pdf]
+          description: Type of media file
+          example: "image"
+        cloudinaryUrl:
+          type: string
+          format: uri
+          description: URL to the file in cloud storage
+          example: "https://res.cloudinary.com/demo/image/upload/v1234567890/sample.jpg"
+        cloudinaryPublicId:
+          type: string
+          description: Cloudinary public ID for the file
+          example: "sample_id_123"
+        fileSize:
+          type: number
+          minimum: 0
+          description: File size in bytes
+          example: 1024000
+        tags:
+          type: array
+          items:
+            type: string
+            maxLength: 50
+          description: Tags associated with the media file
+          example: ["vacation", "beach", "summer"]
+        viewCount:
+          type: number
+          minimum: 0
+          description: Number of times the file has been viewed
+          example: 25
+        description:
+          type: string
+          maxLength: 500
+          description: Description of the media file
+          example: "A beautiful sunset at the beach during our vacation"
+        isActive:
+          type: boolean
+          description: Whether the media file is active
+          example: true
+        createdBy:
+          type: string
+          description: Who created this record
+          example: "john.doe@gmail.com"
+        createdOn:
+          type: string
+          format: date-time
+          description: When the record was created
+          example: "2024-01-15T10:30:00Z"
+        modifiedBy:
+          type: string
+          description: Who last modified this record
+          example: "john.doe@gmail.com"
+        modifiedOn:
+          type: string
+          format: date-time
+          description: When the record was last modified
+          example: "2024-01-15T10:30:00Z"
+
+    AuthResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Token is valid"
+        token:
+          type: string
+          description: JWT token for authentication
+          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error message
+          example: "Invalid token"
+        status:
+          type: string
+          description: Error status
+          example: "error"
+        statusCode:
+          type: number
+          description: HTTP status code
+          example: 400
+
+security:
+  - bearerAuth: []
+
+paths:
+  /api/account:
+    get:
+      summary: Get all user accounts
+      description: Retrieve a list of all user accounts (requires authentication)
+      tags:
+        - Account
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successfully retrieved list of accounts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '401':
+          description: Unauthorized - Invalid or missing authentication token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/account/{id}:
+    get:
+      summary: Get account by ID
+      description: Retrieve a specific user account by its ID (requires authentication)
+      tags:
+        - Account
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: User ID
+          example: "64f8c8e9b1a2c3d4e5f6a7b8"
+      responses:
+        '200':
+          description: Successfully retrieved account data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          description: Unauthorized - Invalid or missing authentication token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/account/verify-google/{token}:
+    post:
+      summary: Verify Google OAuth token
+      description: Verify a Google OAuth token and return a JWT token for authentication. Creates a new user if one doesn't exist.
+      tags:
+        - Account
+      parameters:
+        - in: path
+          name: token
+          required: true
+          schema:
+            type: string
+          description: Google OAuth ID token
+          example: "eyJhbGciOiJSUzI1NiIsImtpZCI6IjdkYzc5Y..."
+      responses:
+        '200':
+          description: Token verification successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '400':
+          description: Bad request - ID token is required or invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized - Invalid ID token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/media:
+    get:
+      summary: Get all media files
+      description: Retrieve a list of media files with advanced filtering, search, and pagination options
+      tags:
+        - Media
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: fileType
+          schema:
+            type: string
+            enum: [image, video, audio, pdf]
+          description: Filter by file type
+          example: "image"
+        - in: query
+          name: tags
+          schema:
+            type: string
+          description: Filter by tags (comma-separated)
+          example: "vacation,beach"
+        - in: query
+          name: userId
+          schema:
+            type: string
+          description: Filter by user ID
+          example: "64f8c8e9b1a2c3d4e5f6a7b8"
+        - in: query
+          name: createdBy
+          schema:
+            type: string
+          description: Filter by creator
+          example: "john.doe@gmail.com"
+        - in: query
+          name: minSize
+          schema:
+            type: number
+            minimum: 0
+          description: Minimum file size in bytes
+          example: 1000
+        - in: query
+          name: maxSize
+          schema:
+            type: number
+            minimum: 0
+          description: Maximum file size in bytes
+          example: 10000000
+        - in: query
+          name: dateFrom
+          schema:
+            type: string
+            format: date
+          description: Filter from date (YYYY-MM-DD)
+          example: "2024-01-01"
+        - in: query
+          name: dateTo
+          schema:
+            type: string
+            format: date
+          description: Filter to date (YYYY-MM-DD)
+          example: "2024-12-31"
+        - in: query
+          name: search
+          schema:
+            type: string
+          description: Search in filename, description, tags, and creator
+          example: "vacation photos"
+        - in: query
+          name: sortBy
+          schema:
+            type: string
+            enum: [createdAt, viewCount, fileName, fileSize, relevance]
+          description: Sort field
+          example: "createdAt"
+        - in: query
+          name: order
+          schema:
+            type: string
+            enum: [asc, desc]
+          description: Sort order
+          example: "desc"
+        - in: query
+          name: page
+          schema:
+            type: number
+            minimum: 1
+          description: Page number for pagination
+          example: 1
+        - in: query
+          name: limit
+          schema:
+            type: number
+            minimum: 1
+          description: Number of results per page
+          example: 20
+      responses:
+        '200':
+          description: Successfully retrieved media files
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MediaFile'
+        '400':
+          description: Bad request - Invalid query parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized - Invalid or missing authentication token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    post:
+      summary: Upload a media file
+      description: Upload a new media file to the cloud storage and save metadata to database
+      tags:
+        - Media
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - file
+                - userId
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: Media file to upload
+                fileType:
+                  type: string
+                  enum: [image, video, audio, pdf]
+                  description: Type of media file (auto-detected if not provided)
+                  example: "image"
+                userId:
+                  type: string
+                  description: ID of the user uploading the file
+                  example: "64f8c8e9b1a2c3d4e5f6a7b8"
+                tags:
+                  type: string
+                  description: Tags for the media file (comma-separated)
+                  example: "vacation,beach,summer"
+                description:
+                  type: string
+                  maxLength: 500
+                  description: Description of the media file
+                  example: "A beautiful sunset at the beach"
+                createdBy:
+                  type: string
+                  description: Creator identifier (defaults to 'system')
+                  example: "john.doe@gmail.com"
+      responses:
+        '201':
+          description: Media file uploaded successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MediaFile'
+        '400':
+          description: Bad request - No file uploaded or missing required fields
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized - Invalid or missing authentication token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error or cloud upload failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/media/{id}:
+    get:
+      summary: Get media file by ID
+      description: Retrieve a specific media file by its ID and increment view count
+      tags:
+        - Media
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Media file ID
+          example: "64f8c8e9b1a2c3d4e5f6a7b9"
+      responses:
+        '200':
+          description: Successfully retrieved media file data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MediaFile'
+        '401':
+          description: Unauthorized - Invalid or missing authentication token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Media file not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    delete:
+      summary: Delete media file by ID
+      description: Soft delete a media file by setting isActive to false
+      tags:
+        - Media
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Media file ID
+          example: "64f8c8e9b1a2c3d4e5f6a7b9"
+      responses:
+        '200':
+          description: Media file deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Media file deleted successfully"
+        '401':
+          description: Unauthorized - Invalid or missing authentication token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Media file not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+tags:
+  - name: Account
+    description: User account management and authentication
+  - name: Media
+    description: Media file management and operations

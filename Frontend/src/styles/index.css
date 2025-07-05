@@ -1,0 +1,16 @@
+/* Main CSS file that imports all component styles */
+
+/* Import global styles first */
+@import './globals.css';
+
+/* Import component-specific styles */
+@import './header.css';
+@import './filters.css';
+@import './media-cards.css';
+@import './upload.css';
+@import './details.css';
+@import './login.css';
+@import './profile.css';
+@import './home.css';
+
+/* Additional utility classes can be added here */

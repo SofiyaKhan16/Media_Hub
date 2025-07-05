@@ -1,0 +1,81 @@
+/* Profile Page Styles */
+
+.profile-container {
+  min-height: 100vh;
+  background: #f3f4f6;
+  color: #1f2937;
+}
+
+.profile-main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.kpi-cards-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.kpi-card {
+  background: #fff;
+  border-radius: 0.5rem;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+  padding: 0.75rem 1.25rem;
+  min-width: 110px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 1rem;
+}
+
+.kpi-emoji-text {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #1f2937;
+  margin-bottom: 0.15rem;
+}
+
+.kpi-value {
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: #2563eb;
+  margin-bottom: 0.1rem;
+}
+
+.kpi-label {
+  color: #6b7280;
+  font-weight: 400;
+  font-size: 0.95rem;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .kpi-cards-row {
+    gap: 0.5rem;
+  }
+  
+  .kpi-card {
+    min-width: 100px;
+    padding: 0.5rem 1rem;
+  }
+  
+  .kpi-emoji-text {
+    font-size: 1rem;
+  }
+  
+  .kpi-value {
+    font-size: 1.1rem;
+  }
+  
+  .kpi-label {
+    font-size: 0.875rem;
+  }
+}
