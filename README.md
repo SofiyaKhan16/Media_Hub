@@ -209,8 +209,4 @@ This project is licensed under the ISC License - see the [LICENSE](LICENSE) file
    - Verify JWT_SECRET is set in your `.env` file
    - Check if tokens are being stored correctly in local storage
 
-## 📧 Support
 
-If you encounter any issues or have questions, please open an issue on GitHub or contact the development team.
-
----
