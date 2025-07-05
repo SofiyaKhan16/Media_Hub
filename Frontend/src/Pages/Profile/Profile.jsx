@@ -1,16 +1,19 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { getAllMediaFiles } from '../../api/mediaFile';
 import MediaFilters from '../../Components/MediaFilters';
 import MediaCardsGrid from '../../Components/MediaCardsGrid';
 import { useNavigate } from 'react-router-dom';
 import useInfiniteScroll from '../../hooks/useInfiniteScroll';
+import { removeCookie } from '../../api/cookies';
+import { clearUser } from '../../Store/userSlice';
 
 function Profile() {
   const { id } = useParams();
   const currentUser = useSelector(state => state.user.user);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   
   const isOwnProfile = !id || id === currentUser?.id;
   const profileUserId = isOwnProfile ? currentUser?.id : id;
@@ -190,6 +193,17 @@ function Profile() {
     navigate(`/details/${fileId}`);
   };
 
+  const handleLogout = () => {
+    // Remove JWT token from cookies
+    removeCookie('jwtToken');
+    
+    // Clear user from Redux store
+    dispatch(clearUser());
+    
+    // Navigate to login page
+    navigate('/login');
+  };
+
   const kpiCards = [
     { icon: '📊', label: 'Total Files', value: kpiData.total },
     { icon: '🖼️', label: 'Images', value: kpiData.images },
@@ -217,6 +231,15 @@ function Profile() {
   return (
     <div className="container">
       <div className="main">
+        {/* Profile Header with Logout Button */}
+        {isOwnProfile && (
+          <div className="profile-header">
+            <button className="btn btn-logout" onClick={handleLogout}>
+              🚪 Logout
+            </button>
+          </div>
+        )}
+
         {/* KPI Cards Row */}
         <div className="kpi-cards-row">
           {kpiCards.map((kpi, idx) => (
