@@ -2,6 +2,12 @@
 
 A modern full-stack web application for managing and sharing multimedia files including images, videos, audio, and PDF documents. Built with React.js frontend and Node.js/Express backend with MongoDB database and Cloudinary integration for efficient media storage and processing.
 
+## 🌐 Live Demo
+
+- **Frontend Application:** https://mediahub-kohl.vercel.app/
+- **Backend API:** https://media-hub-api-w6r6.onrender.com/
+- **API Documentation:** https://media-hub-api-w6r6.onrender.com/api-docs/
+
 ## 🚀 Features
 
 - **User Authentication** - Secure login/signup with JWT tokens and Google OAuth integration
@@ -159,6 +165,8 @@ Once the backend is running, you can access the Swagger API documentation at:
 http://localhost:5000/api-docs
 ```
 
+**Live API Documentation:** https://media-hub-api-w6r6.onrender.com/api-docs/
+
 ## 🔗 API Endpoints
 
 ### Authentication
@@ -172,6 +180,24 @@ http://localhost:5000/api-docs
 - `GET /api/media/:id` - Get specific media file
 - `PUT /api/media/:id` - Update media file
 - `DELETE /api/media/:id` - Delete media file
+
+## 🌐 Deployment
+
+### Frontend (Vercel)
+- **Live URL:** https://mediahub-kohl.vercel.app/
+- **Platform:** Vercel
+- **Build Command:** `npm run build`
+- **Deploy Command:** Automatic deployment from GitHub
+
+### Backend (Render)
+- **Live URL:** https://media-hub-api-w6r6.onrender.com/
+- **Platform:** Render
+- **Build Command:** `npm install`
+- **Start Command:** `npm start`
+
+### Database
+- **MongoDB Atlas** - Cloud database hosting
+- **Cloudinary** - Media file storage and optimization
 
 ## 📱 Usage
 
