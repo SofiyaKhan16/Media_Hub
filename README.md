@@ -1,4 +1,4 @@
-# Multi Media Manager
+# Media Hub ( Multi Media Manager )
 
 A modern full-stack web application for managing and sharing multimedia files including images, videos, audio, and PDF documents. Built with React.js frontend and Node.js/Express backend with MongoDB database and Cloudinary integration for efficient media storage and processing.
 
