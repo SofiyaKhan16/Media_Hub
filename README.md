@@ -209,4 +209,13 @@ http://localhost:5000/api-docs
    - Verify JWT_SECRET is set in your `.env` file
    - Check if tokens are being stored correctly in local storage
 
+## 🚧 Further Implementations / Pending to Develop
 
+### 📢 Notification System
+- **Real-time Notifications** - Notify users when their uploaded files are viewed by others and when new files are created
+
+### 👍 Social Features
+- **Like/Rating System** - Users can like or rate uploaded media files
+
+### 👥 Role-based Access Control & User Management
+- **User Management System** - Administrative interface for managing users with different permission levels and content moderation tools
