@@ -74,6 +74,7 @@ npm install
 
 ### 4. Environment Variables
 
+#### Backend Configuration
 Create a `.env` file in the `Backend` directory with the following variables:
 
 ```env
@@ -89,14 +90,31 @@ CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
 CLOUDINARY_API_KEY=your_cloudinary_api_key
 CLOUDINARY_API_SECRET=your_cloudinary_api_secret
 
-# Google OAuth (optional)
-GOOGLE_CLIENT_ID=your_google_client_id
-GOOGLE_CLIENT_SECRET=your_google_client_secret
-
 # Server Configuration
 PORT=5000
 NODE_ENV=development
+
+# CORS Configuration
+FRONTEND_URL=http://localhost:3000
+
+# Email Configuration (optional)
+EMAIL_SERVICE=gmail
+EMAIL_USER=your_email@gmail.com
+EMAIL_PASS=your_app_password
 ```
+
+#### Frontend Configuration
+Create a `.env` file in the `Frontend` directory with the following variables:
+
+```env
+# API Configuration
+VITE_API_BASE_URL=http://localhost:5000/api
+
+# Google OAuth Configuration
+VITE_GOOGLE_CLIENT_ID=your_google_client_id_here
+```
+
+**Note:** Make sure to add both `.env` files to your `.gitignore` to prevent committing sensitive information to version control.
 
 ### 5. Cloudinary Setup
 
@@ -134,20 +152,6 @@ npm run dev
 ```
 The frontend will start on `http://localhost:5173`
 
-### Production Mode
-
-1. **Build the Frontend:**
-```bash
-cd Frontend
-npm run build
-```
-
-2. **Start the Backend:**
-```bash
-cd Backend
-npm start
-```
-
 ## 📖 API Documentation
 
 Once the backend is running, you can access the Swagger API documentation at:
@@ -184,10 +188,6 @@ http://localhost:5000/api-docs
 3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
-
-## 📝 License
-
-This project is licensed under the ISC License - see the [LICENSE](LICENSE) file for details.
 
 ## 🐛 Troubleshooting
 
