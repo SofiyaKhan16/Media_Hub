@@ -235,18 +235,19 @@ const getAll = async (req, res, next) => {
 
 const getById = async (req, res, next) => {
   try {
-    const doc = await MediaFile.findOne({ 
-      _id: req.params.id, 
-      isActive: true 
-    }).populate('userId', 'username email profilePicture');
+    const doc = await MediaFile.findOneAndUpdate(
+      { _id: req.params.id, isActive: true },
+      { $inc: { viewCount: 1 } },
+      { new: true }
+    ).populate('userId', 'username email profilePicture');
     
-    if (!doc) return next(new AppError('Not found', 404));
-    
-    await MediaFile.findByIdAndUpdate(req.params.id, { $inc: { viewCount: 1 } });
+    if (!doc) {
+      return next(new AppError('Media file not found', 404));
+    }
     
     res.json(doc);
   } catch (error) {
-    return next(new AppError('Error fetching by id: ' + error.message, 500));
+    return next(new AppError('Error fetching media file: ' + error.message, 500));
   }
 };
 
