@@ -1,6 +1,12 @@
-# Multi Media Manager
+# Media Hub ( Multi Media Manager )
 
 A modern full-stack web application for managing and sharing multimedia files including images, videos, audio, and PDF documents. Built with React.js frontend and Node.js/Express backend with MongoDB database and Cloudinary integration for efficient media storage and processing.
+
+## 🌐 Live Demo
+
+- **Frontend Application:** https://mediahub-kohl.vercel.app/
+- **Backend API:** https://media-hub-api-w6r6.onrender.com/
+- **API Documentation:** https://media-hub-api-w6r6.onrender.com/api-docs/
 
 ## 🚀 Features
 
@@ -74,6 +80,7 @@ npm install
 
 ### 4. Environment Variables
 
+#### Backend Configuration
 Create a `.env` file in the `Backend` directory with the following variables:
 
 ```env
@@ -89,14 +96,31 @@ CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
 CLOUDINARY_API_KEY=your_cloudinary_api_key
 CLOUDINARY_API_SECRET=your_cloudinary_api_secret
 
-# Google OAuth (optional)
-GOOGLE_CLIENT_ID=your_google_client_id
-GOOGLE_CLIENT_SECRET=your_google_client_secret
-
 # Server Configuration
 PORT=5000
 NODE_ENV=development
+
+# CORS Configuration
+FRONTEND_URL=http://localhost:3000
+
+# Email Configuration (optional)
+EMAIL_SERVICE=gmail
+EMAIL_USER=your_email@gmail.com
+EMAIL_PASS=your_app_password
 ```
+
+#### Frontend Configuration
+Create a `.env` file in the `Frontend` directory with the following variables:
+
+```env
+# API Configuration
+VITE_API_BASE_URL=http://localhost:5000/api
+
+# Google OAuth Configuration
+VITE_GOOGLE_CLIENT_ID=your_google_client_id_here
+```
+
+**Note:** Make sure to add both `.env` files to your `.gitignore` to prevent committing sensitive information to version control.
 
 ### 5. Cloudinary Setup
 
@@ -134,26 +158,14 @@ npm run dev
 ```
 The frontend will start on `http://localhost:5173`
 
-### Production Mode
-
-1. **Build the Frontend:**
-```bash
-cd Frontend
-npm run build
-```
-
-2. **Start the Backend:**
-```bash
-cd Backend
-npm start
-```
-
 ## 📖 API Documentation
 
 Once the backend is running, you can access the Swagger API documentation at:
 ```
 http://localhost:5000/api-docs
 ```
+
+**Live API Documentation:** https://media-hub-api-w6r6.onrender.com/api-docs/
 
 ## 🔗 API Endpoints
 
@@ -168,6 +180,24 @@ http://localhost:5000/api-docs
 - `GET /api/media/:id` - Get specific media file
 - `PUT /api/media/:id` - Update media file
 - `DELETE /api/media/:id` - Delete media file
+
+## 🌐 Deployment
+
+### Frontend (Vercel)
+- **Live URL:** https://mediahub-kohl.vercel.app/
+- **Platform:** Vercel
+- **Build Command:** `npm run build`
+- **Deploy Command:** Automatic deployment from GitHub
+
+### Backend (Render)
+- **Live URL:** https://media-hub-api-w6r6.onrender.com/
+- **Platform:** Render
+- **Build Command:** `npm install`
+- **Start Command:** `npm start`
+
+### Database
+- **MongoDB Atlas** - Cloud database hosting
+- **Cloudinary** - Media file storage and optimization
 
 ## 📱 Usage
 
@@ -184,10 +214,6 @@ http://localhost:5000/api-docs
 3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
-
-## 📝 License
-
-This project is licensed under the ISC License - see the [LICENSE](LICENSE) file for details.
 
 ## 🐛 Troubleshooting
 
@@ -209,4 +235,13 @@ This project is licensed under the ISC License - see the [LICENSE](LICENSE) file
    - Verify JWT_SECRET is set in your `.env` file
    - Check if tokens are being stored correctly in local storage
 
+## 🚧 Further Implementations / Pending to Develop
 
+### 📢 Notification System
+- **Real-time Notifications** - Notify users when their uploaded files are viewed by others and when new files are created
+
+### 👍 Social Features
+- **Like/Rating System** - Users can like or rate uploaded media files
+
+### 👥 Role-based Access Control & User Management
+- **User Management System** - Administrative interface for managing users with different permission levels and content moderation tools
