@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { getCookie } from './cookies';
+import { clearUser } from '../Store/userSlice';
 
 const instance = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -23,6 +24,7 @@ instance.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response && error.response.status === 401) {
+      clearUser();
       window.location.href = '/login';
     }
     return Promise.reject(error);
