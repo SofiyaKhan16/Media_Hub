@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getCookie } from './cookies';
+import { getCookie, removeCookie } from './cookies';
 import { clearUser } from '../Store/userSlice';
 
 const instance = axios.create({
@@ -25,6 +25,7 @@ instance.interceptors.response.use(
   (error) => {
     if (error.response && error.response.status === 401) {
       clearUser();
+      removeCookie('jwtToken');
       if (window.location.pathname !== '/login') {
         window.location.href = '/login';
       }
