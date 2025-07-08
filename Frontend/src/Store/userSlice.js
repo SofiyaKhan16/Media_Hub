@@ -14,7 +14,7 @@ const userSlice = createSlice({
       state.user = action.payload;
     },
     clearUser: (state) => {
-      removeCookie()
+      removeCookie('jwtToken');
       state.user = null;
     },
   },
