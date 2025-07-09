@@ -7,9 +7,9 @@ info:
     name: Multi-Media API Support
     email: support@multimedia.com
 servers:
-  - url: http://localhost:5000
+  - url: https://media-hub-api-w6r6.onrender.com/
     description: Development server
-  - url: https://api.multimedia.com
+  - url: https://media-hub-api-w6r6.onrender.com/
     description: Production server
 
 components:
